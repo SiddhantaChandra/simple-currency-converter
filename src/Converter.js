@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 function Converter() {
   const [currencies, setCurrencies] = useState([]);
   const [curData, setCurData] = useState();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [cur1, setCur1] = useState('USD');
   const [cur2, setCur2] = useState('GBP');
   const [amount, setAmount] = useState('10');
@@ -43,14 +43,20 @@ function Converter() {
       setCheckLength(true);
     } else {
       setCheckLength(false);
-      const fetchCurrencyData = () => {
+      async function fetchCurrencyData() {
+        setIsLoading(true);
         const host = 'api.frankfurter.app';
-        fetch(`https://${host}/latest?amount=${amount}&from=${cur1}&to=${cur2}`)
+        await fetch(
+          `https://${host}/latest?amount=${amount}&from=${cur1}&to=${cur2}`,
+        )
           .then((resp) => resp.json())
           .then((data) => {
             setCurData(Object.values(data.rates));
           });
-      };
+        setIsLoading(false);
+      }
+
+      if (cur1 === cur2) return setCurData(amount);
 
       fetchCurrencyData();
     }
@@ -103,7 +109,7 @@ function Converter() {
         </h3>
       ) : (
         <h3 className="text-lg font-semibold">
-          {amount} {cur1} = {curData} {cur2}
+          {amount} {cur1} = {isLoading ? 'Loading' : curData} {cur2}
         </h3>
       )}
     </div>
