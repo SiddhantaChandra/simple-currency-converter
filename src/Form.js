@@ -30,7 +30,7 @@ export function Form({ data, fromCur, setFromCur, toCur, setToCur }) {
       setToAmount(data.rates[toCur]);
     }
 
-    if (fromAmount === '' || fromAmount === 0 || fromCur === toCur) {
+    if (fromAmount === '' || fromAmount === '0' || fromCur === toCur) {
       // setIsValid(false);
       return;
     } else {
@@ -48,7 +48,7 @@ export function Form({ data, fromCur, setFromCur, toCur, setToCur }) {
       setFromAmount(data.rates[fromCur]);
     }
 
-    if (toAmount === '' || fromCur === toCur) {
+    if (toAmount === '' || toAmount === '0' || fromCur === toCur) {
       // setIsValid(false);
       return;
     } else {
@@ -58,40 +58,56 @@ export function Form({ data, fromCur, setFromCur, toCur, setToCur }) {
 
   return (
     <div>
-      <div>
+      <div className="rounded-md overflow-hidden mb-6 border-2 border-gray-400">
         <input
+          className="h-10 px-4"
           onChange={handleFromAmount}
-          value={fromAmount}
+          value={toAmount === '0' || '' ? 0 : fromAmount}
           onFocus={handleFromConvert}
         />
-        <input value={fromCur} disabled />
+        <input
+          value={fromCur}
+          disabled
+          className="w-12 text-center h-10 bg-white  border-r-2"
+        />
         <select
           id="fromCurrency"
           onChange={(e) => setFromCur(e.target.value)}
           value={fromCur}
+          className="px-4 h-10 bg-yellow-500"
         >
           {data.map((cur) => {
             return (
-              <option key={Object.keys(cur)} value={Object.keys(cur)}>
+              <option
+                key={Object.keys(cur)}
+                value={Object.keys(cur)}
+                className="p-4"
+              >
                 {Object.values(cur)}
               </option>
             );
           })}
         </select>
       </div>
-      <div>
+      <div className="rounded-md overflow-hidden border-2 border-gray-400">
         <input
+          className="h-10 px-4"
           onChange={(e) => {
             setToAmount(e.target.value);
           }}
-          value={toAmount}
+          value={fromAmount === '0' || '' ? 0 : toAmount}
           onFocus={handleToConvert}
         />
-        <input value={toCur} disabled />
+        <input
+          value={toCur}
+          disabled
+          className="w-12 text-center h-10 bg-white border-r-2"
+        />
         <select
           id="toCurrency"
           onChange={(e) => setToCur(e.target.value)}
           value={toCur}
+          className="px-4 h-10 bg-purple-500 "
         >
           {data.map((cur) => {
             return (

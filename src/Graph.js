@@ -25,13 +25,20 @@ function Graph({ cur1, cur2 }) {
   };
 
   const currentDate = new Date();
-  const formattedDate = formatDate(currentDate);
+  // const formattedDate = formatDate(currentDate);
   const oneYearAgo = subtractXYear(currentDate);
   const formattedOneYearAgo = formatDate(oneYearAgo);
   const [data, setData] = useState([]);
   const [length, setLength] = useState(0);
   const [lowerLimit, setLowerLimit] = useState(0);
-  //   console.log(data);
+  // console.log(data);
+  data.forEach((key) => {
+    const dateStr = key.date;
+    const dateObj = new Date(dateStr);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const newDate = dateObj.toLocaleDateString(undefined, options);
+    key.date = newDate;
+  });
 
   useEffect(
     function () {
@@ -51,6 +58,7 @@ function Graph({ cur1, cur2 }) {
             newDataArray.push(newData);
           }
           setLowerLimit(Math.min(...rates));
+          // console.log(Math.min(...rates));
           setLength(Math.floor(newDataArray.length / 3));
           setData(newDataArray);
         });
@@ -59,14 +67,14 @@ function Graph({ cur1, cur2 }) {
   );
 
   return (
-    <div className="App">
-      <p>
-        {formattedDate}, {formattedOneYearAgo}, {years}
-      </p>
-
-      <div className="flex gap-6 flex-row-reverse">
+    <div className="mt-8">
+      <div className="flex gap-6 flex-row-reverse mr-7">
         <button
-          className="bg-yellow-500 px-4 py-2 rounded-md"
+          className={
+            years === 1
+              ? `bg-purple-500 px-4 py-2 rounded-md`
+              : 'bg-yellow-500 px-4 py-2 rounded-md'
+          }
           onClick={() => {
             setYears(1);
           }}
@@ -74,7 +82,11 @@ function Graph({ cur1, cur2 }) {
           1 Year
         </button>
         <button
-          className="bg-yellow-500 px-4 py-2 rounded-md"
+          className={
+            years === 3
+              ? `bg-purple-500 px-4 py-2 rounded-md`
+              : 'bg-yellow-500 px-4 py-2 rounded-md'
+          }
           onClick={() => {
             setYears(3);
           }}
@@ -82,7 +94,11 @@ function Graph({ cur1, cur2 }) {
           3 Year
         </button>
         <button
-          className="bg-yellow-500 px-4 py-2 rounded-md"
+          className={
+            years === 5
+              ? `bg-purple-500 px-4 py-2 rounded-md`
+              : 'bg-yellow-500 px-4 py-2 rounded-md'
+          }
           onClick={() => {
             setYears(5);
           }}
